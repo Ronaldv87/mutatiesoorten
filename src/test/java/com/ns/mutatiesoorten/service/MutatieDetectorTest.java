@@ -36,7 +36,7 @@ class MutatieDetectorTest {
     }
 
     @Test
-    void detecteerMutatieSoort_geeftGeenMutatie_alsOorspronkelijkeTrajectLeegIs() {
+    void detecteerMutatieSoort_geeftOnbekend_alsOorspronkelijkeTrajectLeegIs() {
         // Arrange
         var oorspronkelijkTraject = new Traject(List.of());
         var nieuwTraject = new Traject(List.of("A", "B", "C", "D", "E"));
@@ -49,7 +49,7 @@ class MutatieDetectorTest {
     }
 
     @Test
-    void detecteerMutatieSoort_geeftGeenMutatie_alsNieuwTrajectLeegIs() {
+    void detecteerMutatieSoort_geeftOnbekend_alsNieuwTrajectLeegIs() {
         // Arrange
         var oorspronkelijkTraject = new Traject(List.of("A", "B", "C", "D", "E"));
         var nieuwTraject = new Traject(List.of());
