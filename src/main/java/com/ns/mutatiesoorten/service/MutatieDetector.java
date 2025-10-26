@@ -23,29 +23,17 @@ public class MutatieDetector {
         var oospronkelijkeDrp = oorspronkelijkTraject.dienstregelpunten();
         var nieuweDrp = nieuwTraject.dienstregelpunten();
 
-        if (nieuweDrp.isEmpty() || oospronkelijkeDrp.isEmpty()) {
-            return ONBEKEND;
-        }
+        if (nieuweDrp.isEmpty() || oospronkelijkeDrp.isEmpty()) return ONBEKEND;
 
-        if (oospronkelijkeDrp.equals(nieuweDrp)) {
-            return ORIGINELE_TRAJECT;
-        }
+        if (oospronkelijkeDrp.equals(nieuweDrp)) return ORIGINELE_TRAJECT;
 
-        if (isVerlengenBegin(oospronkelijkeDrp, nieuweDrp)) {
-            return VERLENGEN_BEGIN;
-        }
+        if (isVerlengenBegin(oospronkelijkeDrp, nieuweDrp)) return VERLENGEN_BEGIN;
 
-        if (isVerlengenEind(oospronkelijkeDrp, nieuweDrp)) {
-            return VERLENGEN_EIND;
-        }
+        if (isVerlengenEind(oospronkelijkeDrp, nieuweDrp)) return VERLENGEN_EIND;
 
-        if (isOpheffenBegin(oospronkelijkeDrp, nieuweDrp)) {
-            return OPHEFFEN_BEGIN;
-        }
+        if (isOpheffenBegin(oospronkelijkeDrp, nieuweDrp)) return OPHEFFEN_BEGIN;
 
-        if (isOpheffenEind(oospronkelijkeDrp, nieuweDrp)) {
-            return OPHEFFEN_EIND;
-        }
+        if (isOpheffenEind(oospronkelijkeDrp, nieuweDrp)) return OPHEFFEN_EIND;
 
         return ONBEKEND;
     }
