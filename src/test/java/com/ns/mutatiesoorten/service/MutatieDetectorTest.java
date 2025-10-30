@@ -1,17 +1,20 @@
 package com.ns.mutatiesoorten.service;
 
+import com.ns.mutatiesoorten.exceptions.MutatieRequestExceptie;
 import com.ns.mutatiesoorten.model.Traject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.ns.mutatiesoorten.model.MutatieSoorten.OPHEFFEN_EIND;
 import static com.ns.mutatiesoorten.model.MutatieSoorten.ORIGINELE_TRAJECT;
 import static com.ns.mutatiesoorten.model.MutatieSoorten.ONBEKEND;
 import static com.ns.mutatiesoorten.model.MutatieSoorten.OPHEFFEN_BEGIN;
 import static com.ns.mutatiesoorten.model.MutatieSoorten.VERLENGEN_BEGIN;
 import static com.ns.mutatiesoorten.model.MutatieSoorten.VERLENGEN_EIND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MutatieDetectorTest {
 
@@ -24,41 +27,35 @@ class MutatieDetectorTest {
 
     @Test
     void detecteerMutatieSoort_geeftGeenMutatie_alsTrajectenGelijkZijn() {
-        // Arrange
+        // Given
         var oorspronkelijkTraject = new Traject(List.of("A", "B", "C", "D", "E"));
         var nieuwTraject = new Traject(List.of("A", "B", "C", "D", "E"));
 
-        // Act
+        // When
         var mutatieSoort = mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject);
 
-        // Assert
+        // Then
         assertThat(mutatieSoort).isEqualTo(ORIGINELE_TRAJECT);
     }
 
     @Test
     void detecteerMutatieSoort_geeftOnbekend_alsOorspronkelijkeTrajectLeegIs() {
-        // Arrange
+        // Given
         var oorspronkelijkTraject = new Traject(List.of());
         var nieuwTraject = new Traject(List.of("A", "B", "C", "D", "E"));
 
-        // Act
-        var mutatieSoort = mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject);
-
-        // Assert
-        assertThat(mutatieSoort).isEqualTo(ONBEKEND);
+        // When Then
+        assertThrows(MutatieRequestExceptie.class, () -> mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject));
     }
 
     @Test
     void detecteerMutatieSoort_geeftOnbekend_alsNieuwTrajectLeegIs() {
-        // Arrange
+        // Given
         var oorspronkelijkTraject = new Traject(List.of("A", "B", "C", "D", "E"));
         var nieuwTraject = new Traject(List.of());
 
-        // Act
-        var mutatieSoort = mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject);
-
-        // Assert
-        assertThat(mutatieSoort).isEqualTo(ONBEKEND);
+        //
+        assertThrows(MutatieRequestExceptie.class, () -> mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject));
     }
 
     @Test
@@ -111,6 +108,19 @@ class MutatieDetectorTest {
 
         // Then
         assertThat(mutatieSoort).isEqualTo(OPHEFFEN_BEGIN);
+    }
+
+    @Test
+    void detecteerMutatieSoort_geeftOpheffenEind_alsTrajectBeginIsOpgeheven() {
+        // Given
+        var oorspronkelijkTraject = new Traject(List.of("A", "B", "C", "D", "E"));
+        var nieuwTraject = new Traject(List.of("A", "B", "C"));
+
+        // When
+        var mutatieSoort = mutatieDetector.detecteerMutatieSoort(oorspronkelijkTraject, nieuwTraject);
+
+        // Then
+        assertThat(mutatieSoort).isEqualTo(OPHEFFEN_EIND);
     }
 
     @Test
